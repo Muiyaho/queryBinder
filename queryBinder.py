@@ -57,6 +57,12 @@ def clear():
         entry.grid_forget()
         var_name_label.grid_forget()
 
+    for i in range(100):
+        param_entries[i].grid_remove()
+        param_name_labels[i].grid_remove()
+
+    root.geometry("600x413")
+
 
 def copy_to_clipboard():
     root.clipboard_clear()
@@ -101,6 +107,7 @@ root = tk.Tk()
 root.title("Query Binding")
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
+root.geometry("610x413")
 
 query_label = tk.Label(root, text="Log Text:")
 query_label.grid(row=0, column=0, sticky="nw", pady=(10, 0))
