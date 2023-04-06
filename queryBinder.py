@@ -56,7 +56,7 @@ def clear():
     for entry, var_name_label in zip(param_entries, param_name_labels):
         entry.grid_forget()
         var_name_label.grid_forget()
-    root.geometry("610x433")
+    root.geometry("620x433")
 
 def copy_to_clipboard():
     root.clipboard_clear()
@@ -92,7 +92,7 @@ def update_params():
     result_text.insert(tk.END, result)
 
     update_button.grid(row=10, column=0, pady=(10, 0))
-    root.geometry("611x433")
+    root.geometry("620x435")
 
 def update_param_entries():
     update_params()
