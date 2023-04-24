@@ -86,10 +86,10 @@ class QueryBindingApp(QMainWindow):
             self.param_entries[i].hide()
             self.param_name_labels[i].hide()
 
-            self.entries_layout.addStretch(1)  # 이 줄을 추가하여 파라미터 영역이 더 넓어지도록 합니다.
+            self.entries_layout.addStretch(1)
 
-        main_layout.setStretch(0, 7)  # 왼쪽 레이아웃의 비율을 줄입니다.
-        main_layout.setStretch(1, 3)  # 오른쪽 레이아웃의 비율을 늘립니다.
+        main_layout.setStretch(0, 7)  # 왼쪽 레이아웃의 비율 7
+        main_layout.setStretch(1, 3)  # 오른쪽 레이아웃의 비율 3
     def bind_query(self, query_template, params):
         query_template = re.sub(r'\?', r"'{}'", query_template)
         return query_template.format(*params)
@@ -104,15 +104,16 @@ class QueryBindingApp(QMainWindow):
     def extract_binding_vars(self, query_template):
         matches = re.findall(r"(\w+)\s*=\s*\?", query_template)
         question_marks = query_template.count("?")
-
+        index = len(matches) + 1 #몇번째 변수인지 알기 위해서
         while len(matches) < question_marks:
-            matches.append("temp")
+            matches.append("temp" + str(index))
+            index += 1
 
         return matches
 
     def submit(self):
         log_text = self.query_text.toPlainText().strip()
-        query_template = log_text.split("DEBUG")[0].strip()
+        query_template = log_text.split("DEBUG")[0].strip() #로그에 떨어지는 DEBUG를 기점으로 쿼리랑 파라미터로 나눔
 
         params = self.extract_query_params(log_text)
         binding_vars = self.extract_binding_vars(query_template)
@@ -120,7 +121,6 @@ class QueryBindingApp(QMainWindow):
         for i, (param, binding_var) in enumerate(zip(params, binding_vars)):
             self.param_name_labels[i].setText(f"{binding_var}:")
             self.param_entries[i].setText(param.strip())
-
             self.params_label.setText(f"Parameters ({len(params)}): {', '.join(params)}")
             self.params_label.hide()
 
@@ -138,6 +138,8 @@ class QueryBindingApp(QMainWindow):
         self.result_text.clear()
         self.params_label.setText("Parameters (0):")
         self.params_label.hide()
+        self.clipboard_button.hide()
+        self.update_button.hide()
         for entry, var_name_label in zip(self.param_entries, self.param_name_labels):
             entry.hide()
             var_name_label.hide()
